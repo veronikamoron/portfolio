@@ -179,18 +179,18 @@ window.PORTFOLIO_DATA = {
       fig: "FIG 01 // UKF · CUSTOM GPT",
       title: "Nexus IT Consulting Custom GPT",
       shortDesc:
-        "A Custom GPT built at University Medical Center Freiburg (UKF) through structured prompt engineering to support IT consulting and project management.",
-      tags: ["Custom GPT", "Prompt Engineering", "IT Consulting", "Project Management"],
+        "A Custom GPT built at University Medical Center Freiburg (UKF) to automate project intake forms and identify project risks early across clinical IT workflows.",
+      tags: ["Custom GPT", "Prompt Engineering", "Risk Detection", "IT Project Management"],
       visual: "consulting",
       status: "Work Project · UKF",
       image: "",
       report: {
         problem:
-          "Complex IT consulting and project management workflows involve scattered stakeholder inputs, recurring documentation overhead, and high coordination load.",
+          "Completing standardized IT project intake forms manually takes significant time, and critical project risks or missing requirements often surface too late.",
         approach:
-          "Designed and iterated a tailored Custom GPT with structured system prompts, templates, and domain context for clinical IT project management and consulting tasks.",
+          "Designed and iterated a tailored Custom GPT with structured system prompts and domain templates to auto-populate project forms from stakeholder inputs and flag potential risks early.",
         outcome:
-          "Faster project scoping, sharper requirement specifications, and structured decision support in daily work."
+          "Faster, more consistent project intake documentation and earlier visibility into technical, compliance, and coordination risks."
       },
       links: []
     },
