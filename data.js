@@ -26,9 +26,9 @@ window.PORTFOLIO_DATA = {
       "Independently, I build applied AI prototypes and study how models actually behave under pressure. Grounded in experimental research, I bring <strong>epistemic humility</strong>, <strong>critical thinking</strong>, and <strong>high agency</strong>: testing hypotheses empirically, welcoming data that proves me wrong, and moving rapidly from open-ended questions to working code."
     ],
     principles: ["HIGH AGENCY", "EPISTEMIC HUMILITY", "CRITICAL THINKING", "TRUTH-SEEKING"],
-    exploringLabel: "What I'm exploring",
+    exploringLabel: "Open to collaboration & exchange",
     exploringText:
-      "AI evaluation & red-teaming, model behavior and interpretability from a neuroscience lens, multi-hop GraphRAG, and an early-stage behavioral multi-agent project with Jan Cichosz (Software Engineer).",
+      "I welcome thoughtful conversations, coffee chats, and collaborative opportunities across startups, research initiatives, and AI / Machine Learning projects. Approaching every exchange with intellectual humility and a genuine willingness to help where I can add value, I particularly enjoy discussing ideas in a scientific context — feel free to reach out anytime.",
     capabilities: [
       {
         heading: "AI SAFETY, EVALS & MODEL BEHAVIOR",
@@ -278,8 +278,8 @@ window.PORTFOLIO_DATA = {
       org: "Sigrist Lab / Charité CCO",
       period: "Mar 2022 – Dec 2022 · Berlin",
       summary:
-        "Co-authored a Current Biology (2026) publication; owned hypothesis formulation, neuromuscular junction electrophysiology, tissue preparation, statistical modeling, and data visualization (R, MATLAB).",
-      skills: "Neuroscience · Electrophysiology · Microscopy · R · MATLAB"
+        "Learned hands-on electrophysiology and experimental scientific rigor while contributing to learning and memory projects linked to Alzheimer's research. Actively engaged in lab meetings, scientific project management, research ethics discussions, and MATLAB scripting for data analysis — laying the foundation for my later Master's research and Current Biology (2026) co-authorship.",
+      skills: "Electrophysiology · Learning & Memory · Alzheimer's Research · MATLAB Scripting · Scientific Project Mgmt · Research Ethics"
     }
   ],
 
@@ -313,7 +313,7 @@ window.PORTFOLIO_DATA = {
       title: "Deutsche Schule Santiago",
       caption:
         "Spent several months at the German School in Santiago, Chile — immersing in a new culture, collaborating across languages, and broadening my perspective beyond the lab.",
-      image: "",
+      image: "./assets/field-chile.png",
       coord: "33.45°S · 70.66°W"
     },
     {
