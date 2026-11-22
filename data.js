@@ -11,7 +11,7 @@ window.PORTFOLIO_DATA = {
     roleEyebrow: "M.Sc. Biology (Neuroscience & Computational Biology) · IT Project Mgmt · AI Builder",
     heroHeadline: "Questioning systems. Building tools.",
     heroSubline:
-      "M.Sc. Biology (Neuroscience & Computational Biology). Steering complex clinical IT projects in healthcare — and independently building applied AI & data tools.",
+      "M.Sc. Biology (Neuroscience & Computational Biology). Steering complex clinical IT projects, bridging scientific research, quantitative data modeling, and applied AI / Machine Learning.",
     email: "veronika@moron.de",
     location: "Berlin → Freiburg, Germany",
     linkedin: "https://www.linkedin.com/in/veronika-moron-2b6415303",
@@ -21,14 +21,14 @@ window.PORTFOLIO_DATA = {
     portraitCaptionRight: "BERLIN → FREIBURG",
     aboutHeading: "Science, critical thinking, and building with purpose.",
     aboutParagraphs: [
-      "Trained as a neuroscientist (M.Sc. in Biology at Freie Universität Berlin, Final Grade 1.1 — Majors: Neuroscience & Computational Biology), with research in sleep homeostasis, synaptic plasticity, memory, learning, and Alzheimer's research at Sigrist Lab / Charité CCO.",
-      "Today I work in <strong>IT project management</strong> at the University Medical Center Freiburg — aligning clinical departments, external vendors, and technical teams across complex IT projects in critical healthcare infrastructure.",
-      "Independently, I build applied AI prototypes and study how models actually behave under pressure. Grounded in experimental research, I bring <strong>epistemic humility</strong>, <strong>critical thinking</strong>, and <strong>high agency</strong>: testing hypotheses empirically, welcoming data that proves me wrong, and moving rapidly from open-ended questions to working code."
+      "Trained as a neuroscientist (M.Sc. in Biology at Freie Universität Berlin, Final Grade 1.1; Majors: Neuroscience & Computational Biology), I conducted research on sleep homeostasis, synaptic plasticity, learning, and memory at Sigrist Lab / Charité CCO. Science is rarely a straight path. It taught me how to sit with complexity and think critically. As more decisions and responsibility are handed over to machine learning models, that mindset matters more than ever, and it is exactly what I want to bring to my work.",
+      "Today I work in <strong>IT project management</strong> at the University Medical Center Freiburg, aligning clinical departments, external vendors, and technical teams across complex IT projects in critical healthcare infrastructure.",
+      "Beyond clinical IT, I build applied AI prototypes and pay close attention to where models hold up or break down in practice. Grounded in experimental research, I test assumptions empirically, welcome data that proves me wrong, and move quickly from open questions to working code."
     ],
     principles: ["HIGH AGENCY", "EPISTEMIC HUMILITY", "CRITICAL THINKING", "TRUTH-SEEKING"],
     exploringLabel: "Open to collaboration & exchange",
     exploringText:
-      "I welcome thoughtful conversations, coffee chats, and collaborative opportunities across startups, research initiatives, and AI / Machine Learning projects. Approaching every exchange with intellectual humility and a genuine willingness to help where I can add value, I particularly enjoy discussing ideas in a scientific context — feel free to reach out anytime.",
+      "I welcome thoughtful conversations, coffee chats, and collaborative opportunities across startups, research initiatives, and AI / Machine Learning projects. Approaching every exchange with intellectual humility and a genuine willingness to help where I can add value, I particularly enjoy discussing ideas in a scientific context. Feel free to reach out anytime.",
     capabilities: [
       {
         heading: "AI SAFETY, EVALS & MODEL BEHAVIOR",
