@@ -1,0 +1,39 @@
+# ============================================================
+# .gitignore — Prevent Accidental Leaks & Junk Commits
+# ============================================================
+
+# Environment variables, API keys & credentials (NEVER commit!)
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*secret*
+*credentials*
+*token*
+
+# Private documents (keep CV PDFs & private notes local)
+*CV*.pdf
+*cv*.pdf
+*Resume*.pdf
+*Lebenslauf*.pdf
+*.docx
+*.xlsx
+
+# OS & System junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Optional Node / Build artifacts
+node_modules/
+dist/
+.cache/
+*.log
