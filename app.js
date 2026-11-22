@@ -79,28 +79,33 @@
 
   function renderMediaInto(container, imgSrc, label, sublabel, hideWhenMissing) {
     container.innerHTML = "";
-    if (hideWhenMissing) container.style.display = "none";
-
-    if (!hideWhenMissing) {
+    const showFallback = () => {
+      container.innerHTML = "";
+      if (hideWhenMissing) {
+        container.style.display = "none";
+        return;
+      }
+      container.style.display = "";
       const fb = document.createElement("div");
       fb.innerHTML = `
         <div class="font-serif" style="font-size:1.5rem;color:var(--yellow);margin-bottom:4px;">${label}</div>
         <div class="font-mono" style="font-size:10px;color:var(--muted);">${sublabel}</div>
       `;
       container.appendChild(fb);
+    };
+
+    if (!imgSrc) {
+      showFallback();
+      return;
     }
 
-    if (imgSrc) {
-      const img = new Image();
-      img.alt = label;
-      img.loading = "lazy";
-      img.onload = () => {
-        container.style.display = "";
-        container.innerHTML = "";
-        container.appendChild(img);
-      };
-      img.src = imgSrc;
-    }
+    container.style.display = "";
+    const img = document.createElement("img");
+    img.alt = label;
+    img.loading = "lazy";
+    img.onerror = showFallback;
+    img.src = imgSrc;
+    container.appendChild(img);
   }
 
   /* ---------- 1. Profile, About, Contact & Connect Modal ---------- */

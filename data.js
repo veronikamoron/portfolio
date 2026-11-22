@@ -313,7 +313,7 @@ window.PORTFOLIO_DATA = {
       title: "Deutsche Schule Santiago",
       caption:
         "Spent several months at the German School in Santiago, Chile — immersing in a new culture, collaborating across languages, and broadening my perspective beyond the lab.",
-      image: "./assets/field-chile.jpg",
+      image: "",
       coord: "33.45°S · 70.66°W"
     },
     {
@@ -335,7 +335,7 @@ window.PORTFOLIO_DATA = {
       credentialId: "csm9x46eoh9v",
       skills: "AI Product Strategy · Agentic Workflows",
       verifyUrl: "https://verify.skilljar.com/c/csm9x46eoh9v",
-      image: "./assets/cert-anthropic.jpg"
+      image: ""
     },
     {
       issuer: "Databricks",
@@ -344,7 +344,7 @@ window.PORTFOLIO_DATA = {
       credentialId: "193424763",
       skills: "Azure Databricks · Retrieval-Augmented Generation (RAG)",
       verifyUrl: "https://credentials.databricks.com/08d26e31-cb0a-45c2-a6c0-0b64eddb0ecf",
-      image: "./assets/cert-databricks.jpg"
+      image: ""
     }
   ]
 };
