@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veronika Moron — Science, Agency &amp; Building</title>
+  <meta
+    name="description"
+    content="Portfolio of Veronika Moron — Neuroscientist (M.Sc.), IT Project Manager, and independent AI builder. High agency, critical thinking, and scientific rigor."
+  />
+  <meta property="og:title" content="Veronika Moron — Science, Agency & Building" />
+  <meta property="og:description" content="Scientific rigor, critical thinking, and the agency to build. stay curious." />
+  <meta property="og:type" content="website" />
+
+  <!-- Minimalist Monochrome SVG Favicon -->
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23050506' stroke='%23F5F5F2' stroke-width='3'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23F5F5F2' font-family='Georgia,serif' font-size='28'%3EVM%3C/text%3E%3C/svg%3E"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="top"></div>
+  <div id="scopeWorldOverlay" class="scope-world-overlay" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <a href="#top" class="wordmark">Veronika Moron</a>
+    <div class="stage-coords" aria-hidden="true">
+      <span class="dot dot-green pulse"></span>
+      <span id="liveCoords">REC X: 0000 · Y: 0000</span>
+    </div>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#projects" class="nav-link">Work</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#research" class="nav-link">Research</a>
+      <a href="#field-notes" class="nav-link">Field Notes</a>
+      <button type="button" class="pill-btn open-connect">Let's connect ↗</button>
+    </nav>
+  </header>
+
+  <!-- HERO + VINTAGE BENCHTOP LAB OSCILLOSCOPE -->
+  <section id="heroPortal" class="portal-track">
+    <div class="portal-sticky">
+      <div class="hero-inner">
+        <div id="heroHeader" class="hero-header">
+          <p class="eyebrow">
+            <span class="dot dot-magenta"></span>
+            <span id="heroEyebrow"></span>
+          </p>
+          <h1 id="heroHeadline" class="hero-h1"></h1>
+          <p id="heroSubline" class="hero-subline"></p>
+          <div class="hero-actions">
+            <button type="button" class="pill-btn pill-btn-solid open-connect">Let's connect ↗</button>
+            <a href="#research" class="text-link-mono">Research &amp; work ↓</a>
+          </div>
+        </div>
+
+        <!-- Vintage Matte-Black Benchtop Lab Oscilloscope -->
+        <div id="scopeUnit" class="vintage-scope">
+          <div class="scope-top-bar">
+            <div class="scope-top-group">
+              <span class="screw" aria-hidden="true"></span>
+              <span style="color: var(--ink);">VM-2026</span>
+              <span>// ELECTROPHYSIOLOGY &amp; DATA MONITOR</span>
+            </div>
+            <div class="scope-top-group">
+              <span id="ledStatus" class="scope-top-group" style="color: var(--green);">
+                <span class="dot dot-green pulse"></span>
+                <span>TRIG LOCK</span>
+              </span>
+              <span class="screw" aria-hidden="true"></span>
+            </div>
+          </div>
+
+          <div class="scope-body">
+            <div class="vintage-bezel">
+              <div id="scopeScreen" class="crt-screen">
+                <canvas id="scopeCanvas" aria-hidden="true"></canvas>
+
+                <div class="scope-hud-top">
+                  <span id="chBadge" class="ch-badge">CH 01 // ACTION POTENTIAL</span>
+                  <span id="chMetric" class="ch-metric">-70 mV → +40 mV · 10 ms/div</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="scope-panel">
+              <div>
+                <div class="panel-heading">INPUT CHANNEL</div>
+                <div id="channelKeys" class="channel-keys" style="margin-top: 8px;"></div>
+              </div>
+              <div class="panel-actions">
+                <button id="btnHold" type="button" class="lab-key">HOLD</button>
+                <button id="btnStim" type="button" class="lab-key">STIM +</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dedicated Readout Strip Below Screen (Zero Overlap with Curves!) -->
+          <div class="ch-readout-bar">
+            <h2 id="chTitle" class="ch-title"></h2>
+            <p id="chSub" class="ch-sub"></p>
+          </div>
+
+          <div class="scope-bottom-bar">
+            <span>CLICK [STIM +] TO SIMULATE · MOVE CURSOR TO PROBE</span>
+          </div>
+        </div>
+
+        <!-- 4-Column Recruiter Quick-Facts Strip -->
+        <div class="facts-strip" aria-label="Profile highlights">
+          <div class="fact-cell">
+            <p class="fact-label">M.Sc. Biology (1.1)</p>
+            <p class="fact-value">Neuroscience × Comp. Biology</p>
+          </div>
+          <div class="fact-cell">
+            <p class="fact-label">Publication</p>
+            <p class="fact-value">Current Biology (2026)</p>
+          </div>
+          <div class="fact-cell">
+            <p class="fact-label">Current Role</p>
+            <p class="fact-value">IT Project Mgmt · KRITIS</p>
+          </div>
+          <div class="fact-cell">
+            <p class="fact-label">Independent</p>
+            <p class="fact-value">Python · GraphRAG · LLMs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN MONOCHROME SCIENTIFIC CONTENT -->
+  <main id="scopeWorld" class="scope-world lab-grid">
+
+    <!-- 01 / ABSTRACT -->
+    <section id="about" class="portfolio-section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">01 / ABSTRACT</p>
+            <h2 class="section-title">About me</h2>
+          </div>
+        </div>
+
+        <div class="about-grid">
+          <figure class="specimen-frame">
+            <div id="portraitContainer" class="specimen-media"></div>
+            <figcaption class="specimen-caption">
+              <span id="portraitCapLeft"></span>
+              <span id="portraitCapRight"></span>
+            </figcaption>
+          </figure>
+
+          <div class="about-copy">
+            <h3 id="aboutHeading" class="about-sub"></h3>
+            <div id="aboutParagraphs"></div>
+            <div id="principlesRow" class="principles-row"></div>
+            <div class="focus-box">
+              <p id="exploringLabel" class="focus-box-label">What I'm exploring</p>
+              <p id="currentFocus"></p>
+            </div>
+            <div class="inline-links">
+              <a id="aboutLinkedin" href="#" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+              <a id="aboutGithub" href="#" target="_blank" rel="noreferrer">GitHub ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capabilities & Execution Style (2-Column Monograph Grid) -->
+        <div id="capabilitiesGrid" class="cap-grid"></div>
+      </div>
+    </section>
+
+    <!-- 02 / PUBLISHED RESEARCH & MASTER'S THESIS (Prominent, BEFORE Selected Work!) -->
+    <section id="research" class="portfolio-section">
+      <div class="container">
+        <div id="pubIntro" class="pub-intro"></div>
+        <div id="curatedSpecimens" class="curated-specimens"></div>
+      </div>
+    </section>
+
+    <!-- 03 / SELECTED WORK -->
+    <section id="projects" class="h-scroll-story">
+      <div class="h-scroll-sticky">
+        <div class="container">
+          <div class="section-header" style="margin-bottom: 24px;">
+            <div>
+              <p class="section-eyebrow">03 / SELECTED WORK</p>
+              <h2 class="section-title">Work &amp; independent builds.</h2>
+            </div>
+            <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+              <span id="scrollProgressLabel" class="font-mono" style="font-size: 11px; color: var(--muted);">
+                CLICK ANY CARD FOR LAB REPORT · 05 PROJECTS
+              </span>
+              <a id="projectsGithub" href="#" target="_blank" rel="noreferrer" class="text-link-mono">
+                All repositories ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="progress-track" aria-hidden="true">
+            <div id="hProgressBar" class="progress-fill"></div>
+          </div>
+
+          <div id="hScrollRail" class="h-scroll-rail"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 / EXPERIENCE & EDUCATION -->
+    <section id="experience" class="portfolio-section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">04 / EXPERIENCE &amp; LAB</p>
+            <h2 class="section-title">Where I've worked.</h2>
+          </div>
+        </div>
+        <div id="experienceList" class="exp-list"></div>
+        <div id="educationGrid" class="edu-grid"></div>
+      </div>
+    </section>
+
+    <!-- 05 / FIELD NOTES -->
+    <section id="field-notes" class="portfolio-section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">05 / FIELD NOTES</p>
+            <h2 class="section-title">Beyond the code.</h2>
+          </div>
+          <div class="rail-controls">
+            <button id="railPrev" type="button" class="icon-btn" aria-label="Scroll left">←</button>
+            <button id="railNext" type="button" class="icon-btn" aria-label="Scroll right">→</button>
+          </div>
+        </div>
+        <div id="fieldNotesRail" class="photo-rail"></div>
+      </div>
+    </section>
+
+    <!-- 06 / CERTIFICATES -->
+    <section id="certificates" class="portfolio-section" style="border-bottom: none;">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">06 / CONTINUOUS LEARNING</p>
+            <h2 class="section-title">Certificates</h2>
+          </div>
+        </div>
+        <div id="certGrid" class="cert-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CONTACT & FOOTER -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <p class="contact-eyebrow">07 / WHAT'S NEXT?</p>
+      <h2 class="contact-headline">stay curious.</h2>
+      <p class="contact-sub">let's build.</p>
+
+      <div class="contact-links">
+        <button type="button" class="pill-btn pill-btn-solid open-connect">Let's connect ↗</button>
+        <a id="contactEmail" href="#" class="plain font-mono"></a>
+        <a id="contactLinkedin" href="#" target="_blank" rel="noreferrer" class="plain">LinkedIn ↗</a>
+        <a id="contactGithub" href="#" target="_blank" rel="noreferrer" class="plain">GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Veronika Moron</span>
+      <span class="footer-tagline">keep questioning. keep building.</span>
+      <a href="#top" class="footer-top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: 1-Click Connect Modal -->
+  <dialog id="connectDialog" class="modal" aria-labelledby="connectModalTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close aria-label="Close modal">✕</button>
+      <p class="modal-eyebrow" style="color: var(--muted);">DIRECT CHANNELS // CONNECT</p>
+      <h3 id="connectModalTitle" class="modal-title">stay curious — let's talk.</h3>
+      <div class="connect-grid">
+        <button id="copyEmailBtn" type="button" class="connect-item">
+          <span>
+            <strong>Copy email address</strong><br />
+            <span id="connectEmailText" class="connect-item-meta"></span>
+          </span>
+          <span id="copyEmailStatus" class="font-mono" style="font-size: 11px; color: var(--green);">COPY</span>
+        </button>
+        <a id="connectMailto" href="#" class="connect-item">
+          <span><strong>Send an email</strong><br /><span class="connect-item-meta">Opens your default mail app</span></span>
+          <span class="font-mono" style="font-size: 11px;">MAIL ↗</span>
+        </a>
+        <a id="connectLinkedin" href="#" target="_blank" rel="noreferrer" class="connect-item">
+          <span><strong>LinkedIn</strong><br /><span class="connect-item-meta">Professional profile</span></span>
+          <span class="font-mono" style="font-size: 11px;">OPEN ↗</span>
+        </a>
+        <a id="connectGithub" href="#" target="_blank" rel="noreferrer" class="connect-item">
+          <span><strong>GitHub</strong><br /><span class="connect-item-meta">Code, GraphRAG &amp; experiments</span></span>
+          <span class="font-mono" style="font-size: 11px;">OPEN ↗</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL 2: Project Lab-Report Modal -->
+  <dialog id="projectDialog" class="modal" aria-labelledby="projModalTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close aria-label="Close lab report">✕</button>
+      <p id="projModalFig" class="modal-eyebrow" style="color: var(--muted);"></p>
+      <h3 id="projModalTitle" class="modal-title"></h3>
+      <div id="projModalMedia" class="modal-media"></div>
+      <div class="report-grid">
+        <div class="report-block">
+          <p class="report-label">01 // HYPOTHESIS &amp; PROBLEM</p>
+          <p id="projProblem"></p>
+        </div>
+        <div class="report-block">
+          <p class="report-label">02 // APPROACH &amp; ARCHITECTURE</p>
+          <p id="projApproach"></p>
+        </div>
+        <div class="report-block highlight">
+          <p class="report-label" style="color: var(--green);">03 // OUTCOME</p>
+          <p id="projOutcome"></p>
+        </div>
+      </div>
+      <div id="projModalTags" class="tag-row"></div>
+      <div id="projModalLinks" class="pub-actions"></div>
+    </div>
+  </dialog>
+
+  <!-- MODAL 3: Lightbox Modal (Research Specimens, Field Notes, Certificates) -->
+  <dialog id="lightboxDialog" class="modal" aria-labelledby="lbTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close aria-label="Close lightbox">✕</button>
+      <p id="lbEyebrow" class="modal-eyebrow"></p>
+      <h3 id="lbTitle" class="modal-title"></h3>
+      <div id="lbMedia" class="modal-media"></div>
+      <p id="lbCaption" style="margin: 0 0 18px; font-size: 0.92rem; color: var(--muted);"></p>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+        <span id="lbMeta" class="font-mono" style="font-size: 11px; color: var(--muted);"></span>
+        <a id="lbLink" href="#" target="_blank" rel="noreferrer" class="pill-btn pill-btn-solid" style="display: none;">
+          Verify Credential ↗
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
