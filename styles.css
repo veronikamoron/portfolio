@@ -419,9 +419,66 @@ button { font-family: inherit; }
 .project-card.featured .card-cta { color: var(--bg); font-weight: 600; }
 
 /* ---------- 03 / RESEARCH & CURATED THESIS SPECIMENS ---------- */
-.pub-intro { margin-bottom: 34px; max-width: 780px; }
-.pub-full-title { font-size: 0.95rem; color: var(--muted); margin: 10px 0 20px; }
+.pub-intro { margin-bottom: 34px; max-width: 860px; }
+.pub-full-title { font-size: 0.96rem; color: var(--muted); margin: 10px 0 10px; }
+.pub-authors { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin: 0 0 22px; }
+.pub-authors strong { color: var(--ink); font-weight: 600; }
 .pub-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Master's & Bachelor's Theses 2-Column Monograph Cards */
+.theses-grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+@media (min-width: 860px) {
+  .theses-grid { grid-template-columns: 1fr 1fr; }
+}
+.thesis-card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.thesis-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+.thesis-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.thesis-topic-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 9px;
+  background: #18181B;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--ink);
+}
+.thesis-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.55rem;
+  line-height: 1.18;
+  margin: 0;
+  color: var(--ink);
+}
+.thesis-summary {
+  font-size: 0.88rem;
+  color: rgba(245, 245, 242, 0.8);
+  line-height: 1.62;
+  margin: 0;
+}
 
 .curated-specimens { display: grid; grid-template-columns: 1fr; gap: 22px; }
 @media (min-width: 768px) { .curated-specimens { grid-template-columns: 5fr 7fr; } }

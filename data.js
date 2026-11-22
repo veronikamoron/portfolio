@@ -117,10 +117,12 @@ window.PORTFOLIO_DATA = {
   ],
 
   publication: {
-    eyebrow: "PUBLISHED RESEARCH & M.SC. THESIS (GRADE 1.1) // CURRENT BIOLOGY (2026)",
+    eyebrow: "PUBLISHED RESEARCH & ACADEMIC THESES // CURRENT BIOLOGY (2026)",
     title: "Reboundless & Sleep Homeostasis",
     fullTitle:
       "Constitutively active presynaptic release factor Unc13A prevents homeostatic sleep rebound in Drosophila",
+    authors:
+      "Sheng Huang, Debora Fusca, <strong>Veronika Moron</strong>, Marc Escher, Niraja Ramesh, David Toppe, Zhiying Zhao, Oriane Turrel, Yifan Wu, Sha Liu, Alexander M. Walter, Zhihua Liu, Peter Kloppenburg, Stephan J. Sigrist, Chengji Piao",
     summary:
       "Co-authored peer-reviewed study & Master's Thesis (Grade 1.1, FU Berlin) investigating how synaptic release probability and SNARE complex dynamics regulate homeostatic recovery sleep — based on hands-on tissue preparation, fluorescence microscopy, and neuromuscular junction electrophysiology.",
     sciencedirectUrl:
@@ -133,6 +135,7 @@ window.PORTFOLIO_DATA = {
         title: "Amygdala Fluorescence Microscopy (200 µm)",
         caption:
           "Tissue prepared, stained, and imaged by me via fluorescence microscopy (Amygdala, 200 µm scale). Cellular architecture visualized in magenta, cyan, and yellow.",
+        meta: "2025 · SIGRIST LAB · IN COLLABORATION WITH DR. CHENGJI PIAO · OWNED EXPERIMENTS IN SHAKER KNOCKOUT ALLELE SLEEP RESEARCH",
         image: "./assets/thesis-amygdala.jpg",
         darkSurface: true,
         accentColor: "#E843FF"
@@ -141,10 +144,31 @@ window.PORTFOLIO_DATA = {
         fig: "SPECIMEN B // ORIGINAL LAB DATA I GENERATED",
         title: "Unc13A Cumulative Synaptic Release",
         caption:
-          "Original electrophysiology data I recorded at neuromuscular junctions (NMJs) during my Master's Thesis — comparing cumulative synaptic release across Unc13A w1118, Unc13A wrwr, and αSnap rescue lines.",
+          "Original electrophysiology data I recorded at neuromuscular junctions (NMJs) during my Master's Thesis (2025, Sigrist Lab, in collaboration with Dr. Chengji Piao) — alongside owned experiments in Shaker knockout allele sleep research.",
+        meta: "2025 · SIGRIST LAB · IN COLLABORATION WITH DR. CHENGJI PIAO · M.SC. THESIS (FU BERLIN, GRADE 1.1)",
         image: "./assets/thesis-unc13a-rescue.jpg",
         darkSurface: true,
         accentColor: "#34D399"
+      }
+    ],
+    theses: [
+      {
+        badge: "M.SC. THESIS · GRADE 1.1 · FU BERLIN",
+        accentColor: "#E843FF",
+        topics: ["Sleep Homeostasis", "Synaptic Plasticity", "Presynapse", "Electrophysiology"],
+        title:
+          "Insights into Sleep Regulation in Drosophila Emerge from Sleep Mutants Affecting Presynaptic Release Probability and Neuronal Excitability",
+        summary:
+          "Investigates how heightened synaptic output disrupts sleep regulation in <em>Drosophila melanogaster</em> by comparing two genetically distinct presynaptic pathways: increased neuronal excitability via loss of the <em>Shaker</em> A-type potassium channel, and active-zone vesicle priming via <em>Unc13A</em> gain-of-function variants (<em>Unc13A</em><sup>WRWR/+</sup> and <em>elav&gt;Unc13A</em><sup>PL</sup>) regulated by Ca²⁺/calmodulin. Combining neuromuscular junction electrophysiology with adult sleep rebound and homeostasis analyses, the work distinguishes upstream firing changes from release-site mechanisms — identifying shared presynaptic principles where two molecularly independent pathways converge on disrupted sleep."
+      },
+      {
+        badge: "B.SC. THESIS · GRADE 1.0 · FU BERLIN",
+        accentColor: "#34D399",
+        topics: ["Learning & Memory", "Presynaptic Homeostatic Potentiation (PHP)", "cAMP-PKA Signaling", "Active Zone"],
+        title:
+          "The Relationship Between cAMP-PKA Signaling and Presynaptic Homeostatic Potentiation (PHP) in Drosophila",
+        summary:
+          "Examines how synapses adaptively stabilize neural signaling through presynaptic homeostatic potentiation (PHP), triggered at the larval <em>Drosophila</em> neuromuscular junction by blocking postsynaptic GluRIIA receptors with Philanthotoxin-433 (PhTx). Using learning-and-memory mutants (<em>rutabaga</em>, <em>dunce</em>, and <em>DC0</em> heterozygotes), the study connects cellular cAMP-PKA homeostasis to fast PHP and active-zone scaffold remodeling (BRP): while <em>dunce</em> and <em>rutabaga</em> show PKA-dependent deficits in fast PHP, <em>DC0</em> heterozygotes separate rapid BRP incorporation from physiological PHP expression — demonstrating how disrupted cAMP homeostasis impairs both synaptic plasticity and associative learning."
       }
     ]
   },

@@ -262,12 +262,13 @@
     lbDialog.showModal();
   }
 
-  /* ---------- 4. Curated Research & Master's Thesis ---------- */
+  /* ---------- 4. Curated Research, Paper Authors & Academic Theses ---------- */
   const pub = DATA.publication;
   document.getElementById("pubIntro").innerHTML = `
     <p class="section-eyebrow">02 / ${pub.eyebrow}</p>
     <h2 class="section-title">${pub.title}</h2>
     <p class="pub-full-title">Co-authored in <em>Current Biology</em> (2026): <em>${pub.fullTitle}</em></p>
+    ${pub.authors ? `<p class="pub-authors">${pub.authors}</p>` : ""}
     <div class="pub-actions">
       <a href="${pub.sciencedirectUrl}" target="_blank" rel="noreferrer" class="pill-btn pill-btn-solid">Read on ScienceDirect ↗</a>
       <a href="${pub.doiUrl}" target="_blank" rel="noreferrer" class="pill-btn font-mono" style="font-size:12px;">${pub.doiLabel} ↗</a>
@@ -299,12 +300,29 @@
         title: f.title,
         image: f.image,
         caption: f.caption,
-        meta: "ORIGINAL M.SC. THESIS DATA · FU BERLIN (GRADE 1.1)",
+        meta: f.meta || "2025 · SIGRIST LAB · IN COLLABORATION WITH DR. CHENGJI PIAO",
         lightBg: !f.darkSurface
       })
     );
     specGrid.appendChild(btn);
   });
+
+  const thesesGrid = document.getElementById("thesesGrid");
+  if (thesesGrid && pub.theses) {
+    pub.theses.forEach((th) => {
+      const card = document.createElement("article");
+      card.className = "thesis-card";
+      card.innerHTML = `
+        <p class="thesis-badge" style="color:${th.accentColor};">${th.badge}</p>
+        <div class="thesis-topics">
+          ${th.topics.map((tp) => `<span class="thesis-topic-chip">${tp}</span>`).join("")}
+        </div>
+        <h3 class="thesis-title">${th.title}</h3>
+        <p class="thesis-summary">${th.summary}</p>
+      `;
+      thesesGrid.appendChild(card);
+    });
+  }
 
   /* ---------- 5. Experience & Education ---------- */
   const expList = document.getElementById("experienceList");
