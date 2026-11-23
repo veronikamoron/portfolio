@@ -25,52 +25,44 @@ window.PORTFOLIO_DATA = {
       "Today I work in <strong>IT project management</strong> at the University Medical Center Freiburg, aligning clinical departments, external vendors, and technical teams across complex IT projects in critical healthcare infrastructure.",
       "Beyond clinical IT, I build applied AI prototypes and pay close attention to where models hold up or break down in practice. Grounded in experimental research, I test assumptions empirically, welcome data that proves me wrong, and move quickly from open questions to working code."
     ],
-    principles: ["HIGH AGENCY", "EPISTEMIC HUMILITY", "CRITICAL THINKING", "TRUTH-SEEKING"],
+    principles: ["CRITICAL THINKING", "SCIENTIFIC RIGOR", "OWNERSHIP", "CURIOSITY"],
     exploringLabel: "Open to collaboration & exchange",
     exploringText:
       "I welcome thoughtful conversations, coffee chats, and collaborative opportunities across startups, research initiatives, and AI / Machine Learning projects. Approaching every exchange with intellectual humility and a genuine willingness to help where I can add value, I particularly enjoy discussing ideas in a scientific context. Feel free to reach out anytime.",
     capabilities: [
       {
-        heading: "AI SAFETY, EVALS & MODEL BEHAVIOR",
+        heading: "APPLIED AI & DATA SYSTEMS",
         accentColor: "#E843FF",
         items: [
           {
-            title: "Evaluation & Benchmarking (Evals)",
-            desc: "Designing empirical stress tests to surface hidden failure modes such as sycophancy, edge-case breakdowns, or unreliable behavior."
+            title: "Applied AI & RAG Prototyping",
+            desc: "Building practical LLM workflows, Custom GPTs, and local-first GraphRAG prototypes to solve concrete operational problems."
           },
           {
-            title: "Red-Teaming & Adversarial Thinking",
-            desc: "Probing systems for prompt injection, boundary failures, data integrity flaws, and unintended behaviors."
+            title: "Data Pipelines & Quantitative Analysis",
+            desc: "Automating data validation in Python, analyzing experimental datasets, and turning messy inputs into reliable outputs."
           },
           {
-            title: "Model Psychology & Interpretability",
-            desc: "Approaching neural networks through a neuroscience and behavioral-analysis lens, studying how concepts, goals, and representations emerge."
-          },
-          {
-            title: "Oversight & Verification Workflows",
-            desc: "Structuring human-in-the-loop checks, monitoring loops, and auditing workflows for safer AI deployment."
+            title: "Critical Testing & Reliability",
+            desc: "Stress-testing AI tools hands-on for edge cases, failure modes, and practical limits before using them in real workflows."
           }
         ]
       },
       {
-        heading: "EXECUTION & SCIENTIFIC RIGOR",
+        heading: "DELIVERY & SCIENTIFIC RIGOR",
         accentColor: "#34D399",
         items: [
           {
-            title: "Epistemic Humility & Truth-Seeking",
-            desc: "Willingness to falsify my own hypotheses with data, stay critical of my own results, and follow unexpected signals."
+            title: "Complex IT Project Steering",
+            desc: "Aligning clinical departments, medical directors, external vendors, and IT teams in regulated healthcare infrastructure (KRITIS)."
           },
           {
-            title: "High Agency & Ownership",
-            desc: "Scoping open-ended, unstructured questions independently and driving them through to concrete, testable outcomes."
+            title: "Scientific & Analytical Rigor",
+            desc: "Framing open questions clearly, testing assumptions against data, and updating conclusions when evidence disagrees."
           },
           {
-            title: "High Iteration Velocity",
-            desc: "Turning rough ideas into running prototypes and first empirical tests within hours or days."
-          },
-          {
-            title: "Clear Scientific & Technical Writing",
-            desc: "Distilling complex findings concisely and accurately, without fluff or buzzwords."
+            title: "Clear Cross-Functional Communication",
+            desc: "Translating between scientific, clinical, and technical stakeholders concisely and without unnecessary jargon."
           }
         ]
       }
@@ -83,8 +75,8 @@ window.PORTFOLIO_DATA = {
       dotColor: "#34D399",
       badge: "CH 01 // ACTION POTENTIAL",
       metric: "-70 mV → +40 mV · 10 ms/div",
-      title: "High agency. Critical thinking.",
-      sub: "Questioning assumptions, testing hypotheses, and taking ownership from problem to solution.",
+      title: "From neuroscience to systems.",
+      sub: "Electrophysiology, synaptic dynamics, and testing hypotheses against real experimental data.",
       mode: "ap"
     },
     {
@@ -275,6 +267,27 @@ window.PORTFOLIO_DATA = {
           "Developing an open-ended behavioral research and multi-agent sandbox together with Jan Cichosz (Software Engineer) to observe how autonomous agents communicate, adapt, and surface unexpected edge-case behaviors.",
         outcome:
           "In early research and concept phase, bridging behavioral science, model psychology, and multi-agent system design."
+      },
+      links: []
+    },
+    {
+      id: "ukf-rag-agent",
+      fig: "FIG 06 // UPCOMING · EARLY PHASE · UKF",
+      title: "AI Support Agent (RAG & Ticket System)",
+      shortDesc:
+        "Upcoming early-phase project at University Medical Center Freiburg (UKF): connecting an AI agent via RAG to institutional website knowledge to help answer incoming IT tickets.",
+      tags: ["RAG", "AI Agent", "Ticket System", "UKF", "Upcoming"],
+      inExploration: true,
+      visual: "ukfAgent",
+      status: "Upcoming · Early Phase · UKF",
+      image: "",
+      report: {
+        problem:
+          "Recurring IT support tickets and routine inquiries take up significant capacity across hospital IT teams, even when answers already exist on institutional web pages and documentation.",
+        approach:
+          "Involved in scoping an upcoming RAG-based AI agent at University Medical Center Freiburg (UKF) planned to connect to company website knowledge and assist in answering incoming ticket system requests.",
+        outcome:
+          "Currently in early preparation phase (implementation not yet started), aligning retrieval requirements, ticket system integration, and reliability standards in a regulated healthcare setting."
       },
       links: []
     }

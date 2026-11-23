@@ -74,6 +74,19 @@
       <text x="157" y="19" fill="#E843FF" font-family="monospace" font-size="7" text-anchor="middle">[ACT]</text>
       <rect x="178" y="22" width="14" height="14" fill="#E843FF"/>
       <rect x="181" y="25" width="3" height="3" fill="#050506"/><rect x="186" y="25" width="3" height="3" fill="#050506"/>
+    </svg>`,
+    ukfAgent: `<svg viewBox="0 0 220 50" class="card-visual" fill="none">
+      <rect x="6" y="10" width="52" height="30" rx="3" stroke="#FFFFFF" stroke-opacity="0.45" stroke-dasharray="2 2"/>
+      <text x="32" y="23" fill="#FFFFFF" font-family="monospace" font-size="6.5" text-anchor="middle">WEB /</text>
+      <text x="32" y="33" fill="#34D399" font-family="monospace" font-size="6.5" text-anchor="middle">RAG</text>
+      <path d="M58 25 L82 25" stroke="#34D399" stroke-dasharray="3 2" stroke-width="1.3"/>
+      <rect x="82" y="8" width="56" height="34" rx="3" stroke="#FACC15" stroke-width="1.3"/>
+      <text x="110" y="23" fill="#FACC15" font-family="monospace" font-size="7" text-anchor="middle">AI</text>
+      <text x="110" y="34" fill="#FFFFFF" font-family="monospace" font-size="7" text-anchor="middle">AGENT</text>
+      <path d="M138 25 L162 25" stroke="#E843FF" stroke-dasharray="3 2" stroke-width="1.3"/>
+      <rect x="162" y="10" width="52" height="30" rx="3" stroke="#E843FF" stroke-opacity="0.85"/>
+      <text x="188" y="23" fill="#E843FF" font-family="monospace" font-size="6.5" text-anchor="middle">TICKET</text>
+      <text x="188" y="33" fill="#8E8E95" font-family="monospace" font-size="6.5" text-anchor="middle">SYSTEM</text>
     </svg>`
   };
 
