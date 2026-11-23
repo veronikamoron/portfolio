@@ -21,9 +21,9 @@ window.PORTFOLIO_DATA = {
     portraitCaptionRight: "BERLIN → FREIBURG",
     aboutHeading: "Science, critical thinking, and building with purpose.",
     aboutParagraphs: [
-      "Trained as a neuroscientist (M.Sc. in Biology at Freie Universität Berlin, Final Grade 1.1; Majors: Neuroscience & Computational Biology), I conducted research on sleep homeostasis, synaptic plasticity, learning, and memory at Sigrist Lab / Charité CCO. Science is rarely a straight path. It taught me how to sit with complexity and think critically. As more decisions and responsibility are handed over to machine learning models, that mindset matters more than ever, and it is exactly what I want to bring to my work.",
+      "Trained as a neuroscientist, I conducted research on sleep homeostasis, synaptic plasticity, learning, and memory. Science is rarely a straight path. It taught me how to sit with complexity and think critically. As more decisions and responsibility are handed over to machine learning models, that mindset matters more than ever, and it is exactly what I want to bring to my work.",
       "Today I work in <strong>IT project management</strong> at the University Medical Center Freiburg, aligning clinical departments, external vendors, and technical teams across complex IT projects in critical healthcare infrastructure.",
-      "Beyond clinical IT, I build applied AI prototypes and pay close attention to where models hold up or break down in practice. Grounded in experimental research, I test assumptions empirically, welcome data that proves me wrong, and move quickly from open questions to working code."
+      "Beyond clinical IT, I build applied AI prototypes and pay close attention to where models hold up or break down in practice. Grounded in experimental research, I test assumptions empirically, welcome data that proves me wrong, and move quickly from open questions to working code. ML and agent behavior are my passion."
     ],
     principles: ["CRITICAL THINKING", "SCIENTIFIC RIGOR", "OWNERSHIP", "CURIOSITY"],
     exploringLabel: "Open to collaboration & exchange",
@@ -133,12 +133,12 @@ window.PORTFOLIO_DATA = {
         accentColor: "#E843FF"
       },
       {
-        fig: "SPECIMEN B // ORIGINAL LAB DATA I GENERATED",
-        title: "Unc13A Cumulative Synaptic Release",
+        fig: "SPECIMEN B // ELECTROPHYSIOLOGY · ANONYMIZED",
+        title: "Cumulative Synaptic Release (NMJ)",
         caption:
-          "Original electrophysiology data I recorded at neuromuscular junctions (NMJs) during my Master's Thesis (2025, Sigrist Lab, in collaboration with Dr. Chengji Piao), alongside owned experiments in Shaker knockout allele sleep research.",
+          "Anonymized electrophysiology recording comparing cumulative synaptic release across control and mutant conditions at Drosophila neuromuscular junctions (Sigrist Lab, M.Sc. Thesis, 2025; specific genotypes redacted).",
         meta: "2025 · SIGRIST LAB · IN COLLABORATION WITH DR. CHENGJI PIAO · M.SC. THESIS (FU BERLIN, GRADE 1.1)",
-        image: "./assets/thesis-unc13a-rescue.jpg",
+        image: "./assets/thesis-unc13a-rescue.jpg?v=2",
         darkSurface: true,
         accentColor: "#34D399"
       }
