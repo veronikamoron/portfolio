@@ -458,34 +458,103 @@
     liveCoords.textContent = `REC X: ${String(Math.round(e.clientX)).padStart(4, "0")} · Y: ${String(Math.round(e.clientY)).padStart(4, "0")}`;
   }, { passive: true });
 
-  /* ---------- 10. Vintage Benchtop Oscilloscope (Real Action Potentials + Linear Regression) ---------- */
+  /* ---------- 10. Vintage Benchtop Oscilloscope + Tactile Knobs + Pixel-Lab-Agent ---------- */
   const channels = DATA.channels;
-  let chIndex = 0, running = true, t = 0, manualStim = 0, mouse = { x: 0.5, y: 0.5 };
+  let chIndex = 0, running = true, phase = 0, stimPulse = 0;
+  let noise = 0.52, gain = 0.50;
+  let probeX = -1, probeY = -1;
+
   const scopeScreen = document.getElementById("scopeScreen");
   const canvas = document.getElementById("scopeCanvas");
   const ctx = canvas.getContext("2d");
-
+  const chBadgeEl = document.getElementById("chBadge");
+  const chMetricEl = document.getElementById("chMetric");
+  const chTitleEl = document.getElementById("chTitle");
+  const chSubEl = document.getElementById("chSub");
+  const chReadoutBar = document.getElementById("chReadoutBar");
   const keyWrap = document.getElementById("channelKeys");
+  const miniBtns = Array.from(document.querySelectorAll(".mini-trace-btn"));
+  const sparkCanvases = Array.from(document.querySelectorAll(".mini-spark"));
+  const btnHold = document.getElementById("btnHold");
+  const btnStim = document.getElementById("btnStim");
+
+  const knobNoiseEl = document.getElementById("knobNoise");
+  const knobGainEl = document.getElementById("knobGain");
+  const capNoise = document.getElementById("capNoise");
+  const capGain = document.getElementById("capGain");
+  const arcNoise = document.getElementById("arcNoise");
+  const arcGain = document.getElementById("arcGain");
+  const valNoise = document.getElementById("valNoise");
+  const valGain = document.getElementById("valGain");
+
+  const keyButtons = [];
   channels.forEach((ch, idx) => {
     const k = document.createElement("button");
     k.type = "button";
     k.className = `lab-key${idx === 0 ? " active" : ""}`;
     k.innerHTML = `<span>${ch.keyLabel}</span><span class="dot" style="background:${ch.dotColor};"></span>`;
-    k.addEventListener("click", () => selectChannel(idx));
+    k.addEventListener("click", () => selectChannel(idx, true));
     keyWrap.appendChild(k);
+    keyButtons.push(k);
   });
 
-  function selectChannel(idx) {
+  miniBtns.forEach((b, i) => b.addEventListener("click", () => selectChannel(i, true)));
+
+  function selectChannel(idx, fromUser = false) {
     chIndex = idx;
     const c = channels[idx];
-    document.getElementById("chBadge").textContent = c.badge;
-    document.getElementById("chMetric").textContent = c.metric;
-    document.getElementById("chTitle").textContent = c.title;
-    document.getElementById("chSub").textContent = c.sub;
-    keyWrap.querySelectorAll(".lab-key").forEach((el, i) => el.classList.toggle("active", i === idx));
+    chBadgeEl.textContent = c.badge;
+    chTitleEl.textContent = c.title;
+    chSubEl.textContent = c.sub;
+    if (chReadoutBar) chReadoutBar.style.setProperty("--cap-accent", c.dotColor);
+    keyButtons.forEach((el, i) => el.classList.toggle("active", i === idx));
+    miniBtns.forEach((el, i) => el.classList.toggle("active", i === idx));
+    if (fromUser) interruptAgent();
   }
 
-  document.getElementById("btnHold").addEventListener("click", (e) => {
+  function updateKnobsUI() {
+    if (!capNoise || !capGain) return;
+    capNoise.style.transform = `rotate(${-135 + noise * 270}deg)`;
+    capGain.style.transform = `rotate(${-135 + gain * 270}deg)`;
+    arcNoise.setAttribute("stroke-dasharray", `${(noise * 113).toFixed(1)} 151`);
+    arcGain.setAttribute("stroke-dasharray", `${(gain * 113).toFixed(1)} 151`);
+    valNoise.textContent = `${Math.round(noise * 100)}%`;
+    valGain.textContent = `${(0.5 + gain * 1.3).toFixed(1)}×`;
+  }
+  updateKnobsUI();
+
+  function bindKnob(el, getter, setter) {
+    if (!el) return;
+    let dragging = false, startY = 0, startVal = 0;
+    el.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      startY = e.clientY;
+      startVal = getter();
+      el.classList.add("dragging");
+      el.setPointerCapture(e.pointerId);
+      interruptAgent();
+    });
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const next = Math.max(0.05, Math.min(0.95, startVal + (startY - e.clientY) / 120));
+      setter(next);
+      updateKnobsUI();
+    });
+    const end = () => { dragging = false; el.classList.remove("dragging"); };
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+    el.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      interruptAgent();
+      const delta = e.deltaY < 0 ? 0.06 : -0.06;
+      setter(Math.max(0.05, Math.min(0.95, getter() + delta)));
+      updateKnobsUI();
+    }, { passive: false });
+  }
+  bindKnob(knobNoiseEl, () => noise, (v) => { noise = v; });
+  bindKnob(knobGainEl, () => gain, (v) => { gain = v; });
+
+  btnHold.addEventListener("click", (e) => {
     running = !running;
     e.currentTarget.classList.toggle("active", !running);
     const led = document.getElementById("ledStatus");
@@ -493,175 +562,460 @@
     led.innerHTML = running
       ? '<span class="dot dot-green pulse"></span><span>TRIG LOCK</span>'
       : '<span class="dot dot-yellow"></span><span>HOLD</span>';
+    interruptAgent();
   });
 
-  document.getElementById("btnStim").addEventListener("click", () => {
-    manualStim = 1.0;
-    if (chIndex !== 0) selectChannel(0);
-  });
+  function triggerStim(fromUser = false) {
+    stimPulse = 1.0;
+    btnStim.classList.add("stim-flash");
+    setTimeout(() => btnStim.classList.remove("stim-flash"), 240);
+    if (fromUser) interruptAgent();
+  }
+  btnStim.addEventListener("click", () => triggerStim(true));
 
-  const regPts = Array.from({ length: 34 }, (_, i) => {
+  const OLS_POINTS = Array.from({ length: 34 }, (_, i) => {
     const x = 0.08 + (i / 33) * 0.84;
-    const y = 0.78 - x * 0.56 + Math.sin(i * 4.1) * 0.075 + Math.cos(i * 7.3) * 0.04;
-    return { x, y, color: i % 3 === 0 ? "#E843FF" : i % 3 === 1 ? "#34D399" : "#FFFFFF" };
+    const s1 = Math.sin(i * 12.9898 + 4.1414) * 43758.5453;
+    const r = (s1 - Math.floor(s1)) * 2 - 1;
+    const s2 = Math.sin(i * 78.233 + 1.23) * 19341.23;
+    const r2 = (s2 - Math.floor(s2)) * 2 - 1;
+    return { x, err: r * 0.7 + r2 * 0.3 };
   });
 
-  const nodes = Array.from({ length: 15 }, (_, i) => ({
-    a: (i / 15) * Math.PI * 2,
-    r: 42 + (i % 3) * 28,
-    sp: 0.004 + (i % 4) * 0.002,
-    color: i % 3 === 0 ? "#E843FF" : i % 3 === 1 ? "#34D399" : "#FACC15"
-  }));
+  const GRAPH_NODES = [
+    { x: 0.14, y: 0.52, c: "#FFFFFF", label: "V1" },
+    { x: 0.30, y: 0.25, c: "#E843FF", label: "AMY" },
+    { x: 0.32, y: 0.76, c: "#34D399", label: "HIP" },
+    { x: 0.52, y: 0.48, c: "#FACC15", label: "PFC" },
+    { x: 0.70, y: 0.24, c: "#E843FF", label: "RAG" },
+    { x: 0.72, y: 0.74, c: "#34D399", label: "MEM" },
+    { x: 0.88, y: 0.48, c: "#FACC15", label: "ACT" }
+  ];
+  const GRAPH_EDGES = [[0,1],[0,2],[1,3],[2,3],[1,4],[2,5],[3,4],[3,5],[4,6],[5,6],[3,6]];
+  const WEAK_EDGES = [[0,3],[1,2],[4,5],[0,4]];
 
   function resize() {
     const r = scopeScreen.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = r.width * dpr;
-    canvas.height = r.height * dpr;
+    canvas.width = Math.max(280, Math.floor(r.width * dpr));
+    canvas.height = Math.max(200, Math.floor(r.height * dpr));
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   window.addEventListener("resize", resize);
   resize();
 
-  scopeScreen.addEventListener("mousemove", (e) => {
+  scopeScreen.addEventListener("pointermove", (e) => {
     const r = scopeScreen.getBoundingClientRect();
-    mouse.x = (e.clientX - r.left) / r.width;
-    mouse.y = (e.clientY - r.top) / r.height;
+    probeX = e.clientX - r.left;
+    probeY = e.clientY - r.top;
   });
+  scopeScreen.addEventListener("pointerleave", () => { probeX = -1; probeY = -1; });
 
-  function actionPotential(u) {
-    if (u < 0.14) return 0;
-    if (u < 0.19) { const s = (u - 0.14) / 0.05; return 0.14 * s * s; }
-    if (u < 0.24) { const s = (u - 0.19) / 0.05; return 0.14 + 0.86 * Math.sin(s * Math.PI * 0.5); }
-    if (u < 0.34) { const s = (u - 0.24) / 0.10; return 1.0 - 1.22 * (1 - Math.pow(1 - s, 1.8)); }
-    if (u < 0.62) { const s = (u - 0.34) / 0.28; return -0.22 * Math.exp(-4.2 * s); }
-    return 0;
+  function apShape(u) {
+    const d1 = (u - 0.30) / 0.036;
+    const d2 = (u - 0.37) / 0.055;
+    return Math.exp(-d1 * d1) - 0.24 * Math.exp(-d2 * d2);
   }
 
-  function drawFrame() {
+  function renderMiniSparks(tNow) {
+    sparkCanvases.forEach((cv) => {
+      const idx = Number(cv.dataset.spark);
+      const c = cv.getContext("2d");
+      const w = cv.width, h = cv.height;
+      c.clearRect(0, 0, w, h);
+      if (idx === 0) {
+        c.strokeStyle = "#34D399"; c.lineWidth = 1.4; c.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const u = ((x / w) * 2 - tNow * 0.4) % 1;
+          const uu = u < 0 ? u + 1 : u;
+          const y = h * 0.78 - apShape(uu) * (h * 0.65) + Math.sin(x * 0.5 + tNow * 5) * noise * 2.2;
+          if (x === 0) c.moveTo(x, y); else c.lineTo(x, y);
+        }
+        c.stroke();
+      } else if (idx === 1) {
+        c.strokeStyle = "#E843FF"; c.lineWidth = 1.4;
+        c.beginPath(); c.moveTo(8, h - 4); c.lineTo(w - 8, 4); c.stroke();
+        c.fillStyle = "rgba(255,255,255,0.72)";
+        for (let i = 0; i < 9; i++) {
+          const u = i / 8;
+          const px = 10 + u * (w - 20);
+          const py = (h - 5) - u * (h - 10) + Math.sin(i * 4.2) * noise * 6;
+          c.fillRect(px - 1, py - 1, 2, 2);
+        }
+      } else if (idx === 2) {
+        const pts = [[18,14],[52,6],[58,19],[95,12],[124,9]];
+        c.strokeStyle = "rgba(250,204,21,0.45)"; c.lineWidth = 1;
+        [[0,1],[0,2],[1,3],[2,3],[3,4]].forEach(([a,b]) => {
+          c.beginPath(); c.moveTo(pts[a][0], pts[a][1]); c.lineTo(pts[b][0], pts[b][1]); c.stroke();
+        });
+        c.fillStyle = "#FACC15";
+        pts.forEach(([x,y]) => { c.beginPath(); c.arc(x, y, 2.2, 0, Math.PI * 2); c.fill(); });
+      } else {
+        c.strokeStyle = "#FFFFFF"; c.lineWidth = 1.3; c.beginPath();
+        for (let x = 0; x <= w; x += 3) {
+          const u = x / w;
+          const y = 3 + (1 - Math.exp(-u * 3.5)) * (h - 7);
+          if (x === 0) c.moveTo(x, y); else c.lineTo(x, y);
+        }
+        c.stroke();
+      }
+    });
+  }
+
+  let lastTs = performance.now();
+  function drawFrame(ts) {
+    const dt = Math.min(0.05, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (running) phase += dt;
+    stimPulse = Math.max(0, stimPulse - dt * 2.2);
+
     const w = scopeScreen.clientWidth;
     const h = scopeScreen.clientHeight;
     const c = channels[chIndex];
-    ctx.clearRect(0, 0, w, h);
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.065)";
+    ctx.fillStyle = "#040506";
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.048)";
     ctx.lineWidth = 1;
-    for (let x = 36; x < w; x += 36) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-    for (let y = 32; y < h; y += 32) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    for (let i = 1; i < 10; i++) { const x = (w / 10) * i; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let j = 1; j < 6; j++) { const y = (h / 6) * j; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
 
     if (c.mode === "ap") {
-      const restY = h * 0.56;
-      const amp = h * 0.36;
-      const threshY = restY - amp * 0.14;
-      ctx.strokeStyle = "rgba(232, 67, 255, 0.45)";
+      const gainMult = 0.5 + gain * 1.3;
+      const baseY = h * 0.72, threshY = h * 0.56;
+      ctx.save();
+      ctx.strokeStyle = "rgba(232, 67, 255, 0.36)";
       ctx.setLineDash([4, 4]);
       ctx.beginPath(); ctx.moveTo(0, threshY); ctx.lineTo(w, threshY); ctx.stroke();
-      ctx.setLineDash([]);
+      ctx.restore();
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.fillStyle = "rgba(180,180,192,0.55)";
       ctx.font = "10px monospace";
-      ctx.fillText("+40 mV", 10, restY - amp + 4);
-      ctx.fillText("-55 mV", 10, threshY - 4);
-      ctx.fillText("-70 mV", 10, restY + 12);
+      ctx.fillText("+40 mV", 10, h * 0.22);
+      ctx.fillText("-55 mV", 10, threshY - 5);
+      ctx.fillText("-70 mV", 10, baseY + 14);
 
-      ctx.strokeStyle = "#34D399";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      const periodPx = 250;
-      for (let x = 0; x <= w; x += 2) {
-        const u = ((((x + t * 88) % periodPx) + periodPx) % periodPx) / periodPx;
-        const v = actionPotential(u) * (1 + manualStim * 0.25);
-        const y = restY - v * amp + Math.sin(x * 0.19 + t * 9) * 0.9;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
+      const cycles = 1.6 + gain * 1.2;
+      const amp = (h * 0.46) * Math.min(1.15, 0.75 + gain * 0.4 + stimPulse * 0.25);
 
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
-      ctx.lineWidth = 1;
       ctx.beginPath();
       for (let x = 0; x <= w; x += 3) {
-        const u = ((((x + t * 88 - 18) % periodPx) + periodPx) % periodPx) / periodPx;
-        const y = restY - actionPotential(u) * 0.45 * amp + 8;
+        const u = ((x / w) * cycles - (phase - 0.08) * 0.55) % 1;
+        const uu = u < 0 ? u + 1 : u;
+        const n = (Math.sin(x * 0.19 + phase * 8) * 0.5 + Math.cos(x * 0.43 - phase * 11) * 0.5) * noise * 18;
+        const y = baseY - apShape(uu) * amp + n;
         if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
+      ctx.strokeStyle = "rgba(52, 211, 153, 0.22)";
+      ctx.lineWidth = 2;
       ctx.stroke();
-      manualStim = Math.max(0, manualStim - 0.02);
-    } else if (c.mode === "linreg") {
-      ctx.fillStyle = "rgba(232, 67, 255, 0.10)";
+
+      ctx.save();
+      ctx.shadowColor = "rgba(52, 211, 153, 0.72)";
+      ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.moveTo(w * 0.08, h * 0.72);
-      ctx.lineTo(w * 0.92, h * 0.18);
-      ctx.lineTo(w * 0.92, h * 0.32);
-      ctx.lineTo(w * 0.08, h * 0.84);
+      for (let x = 0; x <= w; x += 2) {
+        const u = ((x / w) * cycles - phase * 0.55) % 1;
+        const uu = u < 0 ? u + 1 : u;
+        const stimBump = stimPulse * Math.exp(-Math.pow((x / w - 0.52) / 0.035, 2)) * (h * 0.44);
+        const n = (Math.sin(x * 0.23 + phase * 10) * 0.55 + Math.cos(x * 0.57 - phase * 13) * 0.45) * noise * 22;
+        const y = baseY - apShape(uu) * amp - stimBump + n;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = "#34D399";
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+      ctx.restore();
+
+      const snrDb = (24 - noise * 20).toFixed(1);
+      chMetricEl.innerHTML = `SNR <strong>+${snrDb} dB</strong> · RATE <strong>${gainMult.toFixed(1)}×</strong>`;
+    } else if (c.mode === "linreg") {
+      const padX = 42, padY = 42;
+      const plotW = w - padX * 2, plotH = h - padY * 2;
+      const slope = 0.55 + gain * 0.35;
+      const spread = 0.03 + noise * 0.36;
+
+      const pts = OLS_POINTS.map((p, i) => {
+        const wave = Math.sin(phase * 1.9 + i * 0.65) * (0.022 + noise * 0.065) + Math.cos(phase * 1.1 - i * 0.4) * 0.014;
+        const burst = stimPulse * Math.sin(i * 1.7 + phase * 8) * 0.11;
+        const y = Math.max(0.06, Math.min(0.94, 0.16 + p.x * slope + p.err * spread + wave + burst));
+        return { x: p.x, y };
+      });
+
+      const meanX = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+      const meanY = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+      let num = 0, denX = 0, denY = 0;
+      pts.forEach((p) => { const dx = p.x - meanX, dy = p.y - meanY; num += dx * dy; denX += dx * dx; denY += dy * dy; });
+      const m = num / (denX || 1), b = meanY - m * meanX;
+      const r2 = Math.max(0.12, Math.min(0.99, (num * num) / ((denX * denY) || 1)));
+
+      ctx.strokeStyle = "rgba(255,255,255,0.22)";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padX, padY); ctx.lineTo(padX, h - padY); ctx.lineTo(w - padX, h - padY); ctx.stroke();
+
+      const band = 10 + noise * 40;
+      ctx.beginPath();
+      for (let i = 0; i <= 24; i++) {
+        const ux = i / 24, px = padX + ux * plotW, py = (h - padY) - (m * ux + b) * plotH;
+        const inf = 1 + Math.pow(ux - 0.5, 2) * 1.4;
+        if (i === 0) ctx.moveTo(px, py - band * inf); else ctx.lineTo(px, py - band * inf);
+      }
+      for (let i = 24; i >= 0; i--) {
+        const ux = i / 24, px = padX + ux * plotW, py = (h - padY) - (m * ux + b) * plotH;
+        const inf = 1 + Math.pow(ux - 0.5, 2) * 1.4;
+        ctx.lineTo(px, py + band * inf);
+      }
       ctx.closePath();
+      ctx.fillStyle = "rgba(232, 67, 255, 0.14)";
       ctx.fill();
 
+      ctx.save();
+      ctx.shadowColor = "rgba(232, 67, 255, 0.72)";
+      ctx.shadowBlur = 10;
       ctx.strokeStyle = "#E843FF";
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(w * 0.08, h * 0.78); ctx.lineTo(w * 0.92, h * 0.25); ctx.stroke();
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(padX, (h - padY) - b * plotH);
+      ctx.lineTo(padX + plotW, (h - padY) - (m + b) * plotH);
+      ctx.stroke();
+      ctx.restore();
 
-      ctx.strokeStyle = "rgba(250, 204, 21, 0.55)";
-      ctx.setLineDash([5, 4]);
-      ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.moveTo(w * 0.08, h * 0.74); ctx.lineTo(w * 0.92, h * 0.42); ctx.stroke();
-      ctx.setLineDash([]);
+      // Subtle live scanner dot along the OLS regression line
+      const scanU = (phase * 0.28) % 1;
+      const scanX = padX + scanU * plotW;
+      const scanY = (h - padY) - (m * scanU + b) * plotH;
+      ctx.save();
+      ctx.shadowColor = "#E843FF"; ctx.shadowBlur = 14;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath(); ctx.arc(scanX, scanY, 3.8, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
 
-      regPts.forEach((pt, i) => {
-        ctx.fillStyle = pt.color;
-        ctx.beginPath();
-        ctx.arc(pt.x * w, pt.y * h + Math.sin(t * 1.8 + i) * 2.5, 3.2, 0, Math.PI * 2);
-        ctx.fill();
+      pts.forEach((p, idx) => {
+        const px = padX + p.x * plotW;
+        const py = (h - padY) - p.y * plotH;
+        const nearScan = Math.abs(p.x - scanU) < 0.06;
+        ctx.fillStyle = nearScan ? "#34D399" : (idx % 4 === 0 ? "#E843FF" : "#F4F4F6");
+        ctx.beginPath(); ctx.arc(px, py, nearScan ? 4.2 : 3, 0, Math.PI * 2); ctx.fill();
       });
+
+      chMetricEl.innerHTML = `OLS R² <strong>${r2.toFixed(2)}</strong> · 95% CI · NOISE <strong>${Math.round(noise * 100)}%</strong>`;
     } else if (c.mode === "network") {
-      const cx = w * 0.52 + (mouse.x - 0.5) * 32;
-      const cy = h * 0.44 + (mouse.y - 0.5) * 18;
-      const cs = nodes.map((n) => ({
-        x: cx + Math.cos(n.a + t * n.sp * 16) * n.r * 1.45,
-        y: cy + Math.sin(n.a * 1.25 + t * n.sp * 13) * n.r * 0.66,
-        color: n.color
-      }));
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < cs.length; i++) {
-        for (let j = i + 1; j < cs.length; j++) {
-          const dx = cs[i].x - cs[j].x;
-          const dy = cs[i].y - cs[j].y;
-          if (dx * dx + dy * dy < 6200) {
-            ctx.beginPath(); ctx.moveTo(cs[i].x, cs[i].y); ctx.lineTo(cs[j].x, cs[j].y); ctx.stroke();
-          }
-        }
+      const speed = 0.5 + gain * 1.3;
+      if (noise > 0.25) {
+        ctx.save();
+        ctx.strokeStyle = `rgba(255,255,255,${(noise - 0.2) * 0.25})`;
+        ctx.setLineDash([3, 4]);
+        WEAK_EDGES.forEach(([a, b]) => {
+          ctx.beginPath();
+          ctx.moveTo(GRAPH_NODES[a].x * w, GRAPH_NODES[a].y * h);
+          ctx.lineTo(GRAPH_NODES[b].x * w, GRAPH_NODES[b].y * h);
+          ctx.stroke();
+        });
+        ctx.restore();
       }
-      cs.forEach((pt) => {
-        ctx.fillStyle = pt.color;
-        ctx.beginPath(); ctx.arc(pt.x, pt.y, 3.8, 0, Math.PI * 2); ctx.fill();
+      GRAPH_EDGES.forEach(([a, b], idx) => {
+        const na = GRAPH_NODES[a], nb = GRAPH_NODES[b];
+        const x1 = na.x * w, y1 = na.y * h, x2 = nb.x * w, y2 = nb.y * h;
+        ctx.strokeStyle = "rgba(250, 204, 21, 0.24)";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+
+        const prog = (phase * 0.55 * speed + idx * 0.17) % 1;
+        ctx.save();
+        ctx.shadowColor = "#FACC15"; ctx.shadowBlur = 8 + stimPulse * 10;
+        ctx.fillStyle = stimPulse > 0.1 ? "#34D399" : "#FACC15";
+        ctx.beginPath(); ctx.arc(x1 + (x2 - x1) * prog, y1 + (y2 - y1) * prog, 2.5 + stimPulse * 1.5, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
       });
+      GRAPH_NODES.forEach((n, idx) => {
+        const nx = n.x * w, ny = n.y * h;
+        const pulse = 1 + Math.sin(phase * 2.5 + idx) * 0.12 + stimPulse * 0.35;
+        ctx.save();
+        ctx.shadowColor = n.c; ctx.shadowBlur = 12; ctx.fillStyle = n.c;
+        ctx.beginPath(); ctx.arc(nx, ny, 5 * pulse, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = "rgba(244,244,246,0.75)";
+        ctx.font = "9.5px monospace";
+        ctx.fillText(n.label, nx + 9, ny + 3);
+      });
+      chMetricEl.innerHTML = `GRAPHRAG <strong>7 NODES</strong> · HOPS <strong>3</strong> · FLOW <strong>${speed.toFixed(1)}×</strong>`;
     } else {
-      const curves = [
-        { color: "#34D399", base: 0.72, dash: [] },
-        { color: "#E843FF", base: 0.66, dash: [4, 3] },
-        { color: "#FACC15", base: 0.58, dash: [2, 3] }
-      ];
-      curves.forEach((cv) => {
-        ctx.strokeStyle = cv.color;
-        ctx.lineWidth = 1.8;
-        ctx.setLineDash(cv.dash);
-        ctx.beginPath();
-        for (let x = 24; x <= w - 24; x += 4) {
-          const norm = (x - 24) / (w - 48);
-          const y = h * 0.16 + (h * cv.base - h * 0.16) * (1 - Math.exp(-norm * 3.8)) + Math.sin(norm * 24 - t * 2) * 2.2;
-          if (x === 24) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      });
-      ctx.setLineDash([]);
+      const padX = 40, padY = 40, plotW = w - padX * 2, plotH = h - padY * 2;
+      const decay = 2.0 + gain * 3.0;
+      ctx.strokeStyle = "rgba(255,255,255,0.2)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padX, padY); ctx.lineTo(padX, h - padY); ctx.lineTo(w - padX, h - padY); ctx.stroke();
+
+      ctx.save();
+      ctx.shadowColor = "rgba(255,255,255,0.45)"; ctx.shadowBlur = 8;
+      ctx.strokeStyle = "#FFFFFF"; ctx.lineWidth = 2.1; ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const u = i / 80, x = padX + u * plotW;
+        const loss = 0.08 + 0.85 * Math.exp(-u * decay) + Math.sin(u * 26 + phase * 3) * noise * 0.08;
+        const y = (h - padY) - Math.max(0.03, Math.min(0.95, loss)) * plotH;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke(); ctx.restore();
+
+      ctx.strokeStyle = "#34D399"; ctx.lineWidth = 1.7; ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const u = i / 80, x = padX + u * plotW;
+        const loss = 0.14 + 0.80 * Math.exp(-u * (decay * 0.82)) + Math.cos(u * 21 - phase * 2.5) * noise * 0.11;
+        const y = (h - padY) - Math.max(0.04, Math.min(0.96, loss)) * plotH;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      chMetricEl.innerHTML = `TRAIN / VAL <strong>${(0.09 + noise * 0.12).toFixed(3)}</strong> · EPOCHS <strong>100</strong>`;
     }
 
-    if (running) t += 0.016;
+    if (probeX >= 0 && probeY >= 0) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.setLineDash([2, 3]);
+      ctx.beginPath(); ctx.moveTo(probeX, 0); ctx.lineTo(probeX, h); ctx.moveTo(0, probeY); ctx.lineTo(w, probeY); ctx.stroke();
+      ctx.restore();
+    }
+
+    renderMiniSparks(phase);
     requestAnimationFrame(drawFrame);
   }
 
-  selectChannel(0);
+  /* ---------- Minimalist 8-Bit Pixel-Lab-Agent Choreography ---------- */
+  const stageEl = document.getElementById("scopeStage");
+  const agentEl = document.getElementById("pixelAgent");
+  const bubbleEl = document.getElementById("agentBubble");
+  const autoToggleBtn = document.getElementById("autoToggleBtn");
+  const agentBtnText = document.getElementById("agentBtnText");
+
+  let agentAuto = true, agentTimers = [], agentAnimRaf = null;
+  let agentPos = { x: 42, y: 0 };
+
+  function clearAgentSchedule() {
+    agentTimers.forEach((id) => clearTimeout(id));
+    agentTimers = [];
+    if (agentAnimRaf) cancelAnimationFrame(agentAnimRaf);
+    if (knobNoiseEl) knobNoiseEl.classList.remove("agent-turning");
+    if (knobGainEl) knobGainEl.classList.remove("agent-turning");
+  }
+  function schedule(fn, ms) { agentTimers.push(setTimeout(fn, ms)); }
+  function setBubble(text, ms = 1800) {
+    if (!bubbleEl) return;
+    if (!text) { bubbleEl.classList.remove("show"); return; }
+    bubbleEl.textContent = text;
+    bubbleEl.classList.add("show");
+    if (ms > 0) schedule(() => bubbleEl.classList.remove("show"), ms);
+  }
+  function getRelCenter(el, ox = 0, oy = 0) {
+    const s = stageEl.getBoundingClientRect(), e = el.getBoundingClientRect();
+    return { x: e.left - s.left + e.width * 0.5 - 16 + ox, y: e.top - s.top + oy };
+  }
+  function moveAgentTo(tx, ty, dur = 700, arc = 16, onDone) {
+    if (!agentEl) return;
+    const sx = agentPos.x, sy = agentPos.y, t0 = performance.now();
+    agentEl.classList.remove("sitting", "waving", "turning");
+    agentEl.classList.add("walking");
+    agentEl.classList.toggle("facing-left", tx < sx);
+    function step(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const ease = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      const x = sx + (tx - sx) * ease;
+      const y = sy + (ty - sy) * ease - Math.sin(p * Math.PI) * arc;
+      agentPos = { x, y };
+      agentEl.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      if (p < 1) agentAnimRaf = requestAnimationFrame(step);
+      else { agentEl.classList.remove("walking"); if (onDone) onDone(); }
+    }
+    agentAnimRaf = requestAnimationFrame(step);
+  }
+  function animateNoiseKnob(targetNoise, dur = 1650) {
+    const startN = noise, t0 = performance.now();
+    if (knobNoiseEl) knobNoiseEl.classList.add("agent-turning");
+    if (agentEl) agentEl.classList.add("turning");
+    function step(now) {
+      if (!agentAuto) {
+        if (knobNoiseEl) knobNoiseEl.classList.remove("agent-turning");
+        if (agentEl) agentEl.classList.remove("turning");
+        return;
+      }
+      const p = Math.min(1, (now - t0) / dur);
+      noise = startN + (targetNoise - startN) * (1 - Math.pow(1 - p, 3));
+      updateKnobsUI();
+      if (p < 1) requestAnimationFrame(step);
+      else {
+        if (knobNoiseEl) knobNoiseEl.classList.remove("agent-turning");
+        if (agentEl) agentEl.classList.remove("turning");
+      }
+    }
+    requestAnimationFrame(step);
+  }
+  function perchOnBezel(msg = "") {
+    if (!autoToggleBtn) return;
+    const perch = getRelCenter(autoToggleBtn, -42, -34);
+    moveAgentTo(perch.x, perch.y, 750, 24, () => {
+      agentEl.classList.remove("facing-left");
+      agentEl.classList.add("sitting");
+      if (msg) setBubble(msg, 2200);
+    });
+  }
+  function interruptAgent() {
+    if (!agentAuto) return;
+    agentAuto = false;
+    clearAgentSchedule();
+    if (autoToggleBtn) autoToggleBtn.classList.remove("active");
+    if (agentBtnText) agentBtnText.textContent = "AGENT: IDLE";
+    if (agentEl && agentEl.classList.contains("visible")) perchOnBezel("YOUR TURN!");
+  }
+  function runAgentDemo() {
+    if (!agentEl || !stageEl || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    clearAgentSchedule();
+    agentAuto = true;
+    if (autoToggleBtn) autoToggleBtn.classList.add("active");
+    if (agentBtnText) agentBtnText.textContent = "AGENT: AUTO";
+
+    noise = 0.78; gain = 0.50; updateKnobsUI();
+    selectChannel(0, false);
+
+    agentPos = { x: 42, y: 0 };
+    agentEl.style.transform = `translate3d(42px, 0px, 0)`;
+
+    // 1. Calmly appear & wave hello after 2.4s
+    schedule(() => { agentEl.classList.add("visible", "waving"); setBubble("HI!", 2200); }, 2400);
+
+    // 2. Unhurried walk to CH 02 (Linear Regression)
+    schedule(() => {
+      const target = getRelCenter(keyButtons[1], -68, -8);
+      moveAgentTo(target.x, target.y, 1250, 12, () => {
+        keyButtons[1].classList.add("agent-press");
+        selectChannel(1, false);
+        setBubble("SIGNAL / NOISE", 1700);
+        schedule(() => keyButtons[1].classList.remove("agent-press"), 260);
+      });
+    }, 5000);
+
+    // 3. Slow hop to NOISE knob & smoothly tune noise 78% -> 12%
+    schedule(() => {
+      const target = getRelCenter(knobNoiseEl, -30, -2);
+      moveAgentTo(target.x, target.y, 950, 10, () => {
+        setBubble("TUNING SNR...", 2200);
+        animateNoiseKnob(0.12, 2400);
+      });
+    }, 7600);
+
+    // 4. Calmly perch on the top bezel edge and hand over to the visitor
+    schedule(() => {
+      agentAuto = false;
+      if (autoToggleBtn) autoToggleBtn.classList.remove("active");
+      if (agentBtnText) agentBtnText.textContent = "AGENT: IDLE";
+      perchOnBezel("TRY ME!");
+    }, 11600);
+  }
+
+  if (autoToggleBtn) autoToggleBtn.addEventListener("click", () => (agentAuto ? interruptAgent() : runAgentDemo()));
+  if (agentEl) agentEl.addEventListener("click", () => (agentAuto ? interruptAgent() : runAgentDemo()));
+
+  selectChannel(0, false);
   requestAnimationFrame(drawFrame);
+  runAgentDemo();
 
   /* ---------- 11. Subtle Scope World Vignette (Zero Scroll-Hijacking!) ---------- */
   const scopeWorldOverlay = document.getElementById("scopeWorldOverlay");

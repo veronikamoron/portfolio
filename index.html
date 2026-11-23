@@ -25,7 +25,7 @@
     href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="./styles.css?v=7" />
+  <link rel="stylesheet" href="./styles.css?v=8" />
 </head>
 <body>
   <div id="top"></div>
@@ -63,55 +63,136 @@
           </div>
         </div>
 
-        <!-- Vintage Matte-Black Benchtop Lab Oscilloscope -->
-        <div id="scopeUnit" class="vintage-scope">
-          <div class="scope-top-bar">
-            <div class="scope-top-group">
-              <span class="screw" aria-hidden="true"></span>
-              <span style="color: var(--ink);">VM-2026</span>
-              <span>// ELECTROPHYSIOLOGY &amp; DATA MONITOR</span>
-            </div>
-            <div class="scope-top-group">
-              <span id="ledStatus" class="scope-top-group" style="color: var(--green);">
-                <span class="dot dot-green pulse"></span>
-                <span>TRIG LOCK</span>
-              </span>
-              <span class="screw" aria-hidden="true"></span>
-            </div>
+        <!-- Vintage Matte-Black Benchtop Lab Oscilloscope + Minimalist 8-Bit Pixel-Lab-Agent -->
+        <div id="scopeStage" class="scope-stage">
+          <div class="pixel-agent" id="pixelAgent" title="Click to toggle Agent Auto-Demo">
+            <div class="agent-bubble" id="agentBubble">HI!</div>
+            <svg class="agent-svg" viewBox="0 0 14 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="6" y="0" width="2" height="1" fill="#34D399"/>
+              <rect x="6" y="1" width="2" height="1" fill="#8E8E98"/>
+              <rect x="3" y="2" width="8" height="6" fill="#F4F4F6"/>
+              <rect x="2" y="3" width="1" height="4" fill="#D4D4DC"/>
+              <rect x="11" y="3" width="1" height="4" fill="#D4D4DC"/>
+              <rect x="4" y="3" width="6" height="4" fill="#0A0A0D"/>
+              <rect x="5" y="4" width="1" height="2" fill="#34D399"/>
+              <rect x="8" y="4" width="1" height="2" fill="#34D399"/>
+              <rect x="4" y="8" width="6" height="4" fill="#E4E4EC"/>
+              <rect x="6" y="9" width="2" height="2" fill="#E843FF"/>
+              <rect x="2" y="8" width="2" height="3" fill="#B8B8C4"/>
+              <g class="arm-right">
+                <rect x="10" y="8" width="2" height="3" fill="#B8B8C4"/>
+                <rect x="11" y="10" width="1" height="1" fill="#34D399"/>
+              </g>
+              <rect x="4" y="12" width="2" height="3" fill="#8E8E98"/>
+              <rect x="8" y="12" width="2" height="3" fill="#8E8E98"/>
+              <rect x="3" y="15" width="3" height="1" fill="#F4F4F6"/>
+              <rect x="8" y="15" width="3" height="1" fill="#F4F4F6"/>
+            </svg>
           </div>
 
-          <div class="scope-body">
-            <div class="vintage-bezel">
-              <div id="scopeScreen" class="crt-screen">
-                <canvas id="scopeCanvas" aria-hidden="true"></canvas>
+          <div id="scopeUnit" class="vintage-scope">
+            <div class="scope-top-bar">
+              <div class="scope-top-group">
+                <span class="screw" aria-hidden="true"></span>
+                <span style="color: var(--ink);">VM-2026</span>
+                <span>// ELECTROPHYSIOLOGY &amp; DATA MONITOR</span>
+              </div>
+              <div class="scope-top-group">
+                <button type="button" class="agent-status-btn active" id="autoToggleBtn">
+                  <span id="agentBtnText">AGENT: AUTO</span>
+                </button>
+                <span id="ledStatus" class="scope-top-group" style="color: var(--green);">
+                  <span class="dot dot-green pulse"></span>
+                  <span>TRIG LOCK</span>
+                </span>
+                <span class="screw" aria-hidden="true"></span>
+              </div>
+            </div>
 
-                <div class="scope-hud-top">
-                  <span id="chBadge" class="ch-badge">CH 01 // ACTION POTENTIAL</span>
-                  <span id="chMetric" class="ch-metric">-70 mV → +40 mV · 10 ms/div</span>
+            <div class="scope-body">
+              <div class="vintage-bezel">
+                <div id="scopeScreen" class="crt-screen">
+                  <canvas id="scopeCanvas" aria-hidden="true"></canvas>
+
+                  <div class="scope-hud-top">
+                    <span id="chBadge" class="ch-badge">CH 01 // ACTION POTENTIAL</span>
+                    <span id="chMetric" class="ch-metric">SNR +14.2 dB · RATE 1.0×</span>
+                  </div>
+                </div>
+
+                <!-- 4-Channel Mini-Trace Preview Strip -->
+                <div class="mini-trace-strip" id="miniTraceStrip">
+                  <button type="button" class="mini-trace-btn active" data-ch="0" style="--accent:#34D399;">
+                    <div class="mini-trace-head"><span>01 AP</span><span class="mini-trace-dot" style="background:#34D399;"></span></div>
+                    <canvas class="mini-spark" data-spark="0" width="140" height="24"></canvas>
+                  </button>
+                  <button type="button" class="mini-trace-btn" data-ch="1" style="--accent:#E843FF;">
+                    <div class="mini-trace-head"><span>02 OLS</span><span class="mini-trace-dot" style="background:#E843FF;"></span></div>
+                    <canvas class="mini-spark" data-spark="1" width="140" height="24"></canvas>
+                  </button>
+                  <button type="button" class="mini-trace-btn" data-ch="2" style="--accent:#FACC15;">
+                    <div class="mini-trace-head"><span>03 GRAPH</span><span class="mini-trace-dot" style="background:#FACC15;"></span></div>
+                    <canvas class="mini-spark" data-spark="2" width="140" height="24"></canvas>
+                  </button>
+                  <button type="button" class="mini-trace-btn" data-ch="3" style="--accent:#FFFFFF;">
+                    <div class="mini-trace-head"><span>04 LOSS</span><span class="mini-trace-dot" style="background:#FFFFFF;"></span></div>
+                    <canvas class="mini-spark" data-spark="3" width="140" height="24"></canvas>
+                  </button>
+                </div>
+              </div>
+
+              <div class="scope-panel">
+                <div>
+                  <div class="panel-heading"><span>INPUT CHANNEL</span><span>4-CH</span></div>
+                  <div id="channelKeys" class="channel-keys" style="margin-top: 8px;"></div>
+                </div>
+
+                <div class="knobs-section">
+                  <div class="panel-heading" style="border-bottom: none; padding-bottom: 4px;"><span>SIGNAL TUNING</span><span>DRAG ↕</span></div>
+                  <div class="knobs-grid">
+                    <div class="knob-unit">
+                      <div class="knob-dial-wrap" id="knobNoise" style="--knob-color:#E843FF;" title="Drag up/down or scroll to adjust Noise / SNR">
+                        <svg class="knob-ring" viewBox="0 0 56 56" aria-hidden="true">
+                          <circle cx="28" cy="28" r="24" fill="none" stroke="#22222B" stroke-width="2.5" stroke-dasharray="113 151" stroke-dashoffset="-19" transform="rotate(135 28 28)"/>
+                          <circle id="arcNoise" cx="28" cy="28" r="24" fill="none" stroke="#E843FF" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="60 151" stroke-dashoffset="0" transform="rotate(135 28 28)"/>
+                        </svg>
+                        <div class="knob-cap" id="capNoise"><div class="knob-notch"></div></div>
+                      </div>
+                      <span class="knob-title">NOISE</span>
+                      <span class="knob-val" id="valNoise">52%</span>
+                    </div>
+
+                    <div class="knob-unit">
+                      <div class="knob-dial-wrap" id="knobGain" style="--knob-color:#34D399;" title="Drag up/down or scroll to adjust Gain / Rate">
+                        <svg class="knob-ring" viewBox="0 0 56 56" aria-hidden="true">
+                          <circle cx="28" cy="28" r="24" fill="none" stroke="#22222B" stroke-width="2.5" stroke-dasharray="113 151" stroke-dashoffset="-19" transform="rotate(135 28 28)"/>
+                          <circle id="arcGain" cx="28" cy="28" r="24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="60 151" stroke-dashoffset="0" transform="rotate(135 28 28)"/>
+                        </svg>
+                        <div class="knob-cap" id="capGain"><div class="knob-notch"></div></div>
+                      </div>
+                      <span class="knob-title">GAIN</span>
+                      <span class="knob-val" id="valGain">1.0×</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel-actions">
+                  <button id="btnHold" type="button" class="lab-key">HOLD</button>
+                  <button id="btnStim" type="button" class="lab-key">STIM +</button>
                 </div>
               </div>
             </div>
 
-            <div class="scope-panel">
-              <div>
-                <div class="panel-heading">INPUT CHANNEL</div>
-                <div id="channelKeys" class="channel-keys" style="margin-top: 8px;"></div>
-              </div>
-              <div class="panel-actions">
-                <button id="btnHold" type="button" class="lab-key">HOLD</button>
-                <button id="btnStim" type="button" class="lab-key">STIM +</button>
-              </div>
+            <!-- Dedicated Readout Strip Below Screen (Zero Overlap with Curves!) -->
+            <div class="ch-readout-bar" id="chReadoutBar">
+              <h2 id="chTitle" class="ch-title"></h2>
+              <p id="chSub" class="ch-sub"></p>
             </div>
-          </div>
 
-          <!-- Dedicated Readout Strip Below Screen (Zero Overlap with Curves!) -->
-          <div class="ch-readout-bar">
-            <h2 id="chTitle" class="ch-title"></h2>
-            <p id="chSub" class="ch-sub"></p>
-          </div>
-
-          <div class="scope-bottom-bar">
-            <span>CLICK [STIM +] TO SIMULATE · MOVE CURSOR TO PROBE</span>
+            <div class="scope-bottom-bar">
+              <span>DRAG KNOBS · CLICK MINI-TRACES · PROBE SCREEN</span>
+              <span>CLICK AGENT TO REPLAY DEMO</span>
+            </div>
           </div>
         </div>
 
@@ -360,6 +441,6 @@
   </dialog>
 
   <script src="./data.js?v=18"></script>
-  <script src="./app.js?v=16"></script>
+  <script src="./app.js?v=18"></script>
 </body>
 </html>
